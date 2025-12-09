@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Rozer</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="dashboard-wrapper">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="sidebar-logo">Rozer</h1>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="sidebar-link active">Dashboard</a>
+        <a href="#" class="sidebar-link">Mock Tests</a>
+        <a href="#" class="sidebar-link">Syllabus</a>
+        <a href="#" class="sidebar-link">Timetable</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <!-- Top Navigation Bar -->
+      <header class="top-nav">
+        <nav class="top-nav-left">
+          <div class="dropdown">
+            <button class="dropdown-btn">Exams ▼</button>
+            <div class="dropdown-content">
+              <a href="#">NDA</a>
+              <a href="#">CDS</a>
+              <a href="#">AFCAT</a>
+            </div>
+          </div>
+          <a href="#" class="top-nav-link">Resources</a>
+          <a href="#" class="top-nav-link">Mock Tests</a>
+        </nav>
+
+        <div class="top-nav-right">
+          <input type="text" placeholder="Search..." class="search-input">
+          <button id="profileBtn" class="profile-btn">Profile</button>
+          <button id="themeToggle" class="theme-toggle" title="Toggle light/dark mode">
+            <span class="theme-icon">☀️</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <main class="dashboard-content">
+        <!-- Hero Section -->
+        <section class="hero-dashboard">
+          <h1 class="dashboard-title">Start Your Rozer Journey</h1>
+          <button class="btn btn-get-started">Get Started</button>
+        </section>
+
+        <!-- Main Cards and Countdown -->
+        <div class="dashboard-grid">
+          <div class="dashboard-cards">
+            <div class="info-card">
+              <h3>Mock Tests</h3>
+              <div class="card-placeholder"></div>
+            </div>
+            <div class="info-card">
+              <h3>Syllabus</h3>
+              <div class="card-placeholder"></div>
+            </div>
+            <div class="info-card">
+              <h3>Timetable</h3>
+              <div class="card-placeholder"></div>
+            </div>
+          </div>
+
+          <!-- Exam Countdown -->
+          <div class="countdown-card">
+            <h3>Exam Countdown</h3>
+            <div class="countdown-number">15</div>
+            <p>Days until next exam</p>
+          </div>
+        </div>
+
+        <!-- Performance Stats -->
+        <div class="performance-section">
+          <div class="performance-card">
+            <h4>Your Performance</h4>
+            <div class="performance-stats">
+              <div class="stat-item">
+                <span class="stat-label">Total Logins:</span>
+                <span class="stat-value" id="loginCount">0</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Last Login:</span>
+                <span class="stat-value" id="lastLogin">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two Column Layout for Articles and Tests -->
+        <div class="two-column-layout">
+          <!-- Featured Articles -->
+          <section class="articles-section">
+            <h2>Featured Articles</h2>
+            <div class="articles-grid">
+              <div class="article-card">
+                <div class="article-image"></div>
+                <h3>Article Title</h3>
+                <p>Lorem ipsum dolor sit. consectetur adipiscing elit.</p>
+              </div>
+              <div class="article-card">
+                <div class="article-image"></div>
+                <h3>Article Title</h3>
+                <p>Lorem ipsum dolor sit. consectetur adipiscing elit.</p>
+              </div>
+              <div class="article-card">
+                <div class="article-image"></div>
+                <h3>Article Title</h3>
+                <p>Lorem ipsum dolor sit. consectetur adipiscing elit.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Upcoming Mock Tests -->
+          <section class="upcoming-tests-section">
+            <h2>Upcoming Mock Tests</h2>
+            <div class="test-list">
+              <div class="test-item">
+                <h4>Mock Test 1</h4>
+                <p>NDA: April 25, 2024, 10:00 AM</p>
+              </div>
+              <div class="test-item">
+                <h4>Mock Test 2</h4>
+                <p>CDS: April 27, 2024, 2:00 PM</p>
+              </div>
+              <div class="test-item">
+                <h4>Mock Test 3</h4>
+                <p>AFCAT: April 30, 2024, 9:00 AM</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Profile</h2>
+      <div class="profile-info">
+        <p><strong>Username:</strong> <span id="modalUsername">-</span></p>
+        <p><strong>Email:</strong> <span id="modalEmail">-</span></p>
+      </div>
+      <button id="logoutBtn" class="btn btn-danger">Logout</button>
+    </div>
+  </div>
+
+  <script src="./JS/theme.js"></script>
+  <script src="./JS/dashboard.js"></script>
+</body>
+</html>
