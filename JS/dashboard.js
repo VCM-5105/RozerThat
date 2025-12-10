@@ -1,101 +1,135 @@
-// Dashboard JavaScript for handling user data and interactions
+
+function getCurrentUser() {
+  const userJson = localStorage.getItem("user");
+  if (!userJson) return null;
+  try {
+    return JSON.parse(userJson);
+  } catch {
+    return null;
+  }
+}
 
 // Check if user is logged in
-async function checkAuth() {
-  try {
-    const response = await fetch('/check-session');
-    const data = await response.json();
-
-    if (!data.loggedIn) {
-      // Redirect to login if not authenticated
-      window.location.href = '/login.html';
-    }
-  } catch (error) {
-    console.error('Auth check error:', error);
-    window.location.href = '/login.html';
+function checkAuth() {
+  const user = getCurrentUser();
+  if (!user) {
+    // Redirect to login if not authenticated
+    window.location.href = "login.html";
+    return null;
   }
+
+  // Save globally for profile modal
+  window.userData = user;
+
+  // If modal elements exist, fill them
+  const modalUsername = document.getElementById("modalUsername");
+  const modalEmail = document.getElementById("modalEmail");
+  if (modalUsername && modalEmail) {
+    modalUsername.textContent = user.username;
+    modalEmail.textContent = user.email;
+  }
+
+  return user;
 }
 
-// Load dashboard data
-async function loadDashboardData() {
-  try {
-    const response = await fetch('/dashboard');
-    const data = await response.json();
 
-    if (data.success) {
-      // Update performance stats
-      document.getElementById('loginCount').textContent = data.performance.loginCount;
 
-      // Format and display last login
-      const lastLogin = new Date(data.performance.lastLogin);
-      const formattedDate = lastLogin.toLocaleString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      document.getElementById('lastLogin').textContent = formattedDate;
+function loadDashboardData() {
+  const loginCountEl = document.getElementById("loginCount");
+  const lastLoginEl = document.getElementById("lastLogin");
 
-      // Store user info for profile modal
-      window.userData = {
-        username: data.user.username,
-        email: data.user.email
-      };
+  // Get existing stats or create default
+  let stats = null;
+  const statsJson = localStorage.getItem("performance");
+  if (statsJson) {
+    try {
+      stats = JSON.parse(statsJson);
+    } catch {
+      stats = null;
+    }
+  }
+  if (!stats) {
+    stats = {
+      loginCount: 0,
+      lastLogin: null,
+    };
+  }
+
+
+  stats.loginCount += 1;
+  stats.lastLogin = new Date().toISOString();
+
+  
+  localStorage.setItem("performance", JSON.stringify(stats));
+
+  if (loginCountEl) {
+    loginCountEl.textContent = stats.loginCount;
+  }
+
+  if (lastLoginEl) {
+    const lastLoginDate = stats.lastLogin ? new Date(stats.lastLogin) : null;
+    if (!lastLoginDate || isNaN(lastLoginDate.getTime())) {
+      lastLoginEl.textContent = "-";
     } else {
-      console.error('Failed to load dashboard data');
+      lastLoginEl.textContent = lastLoginDate.toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     }
-  } catch (error) {
-    console.error('Dashboard data error:', error);
   }
 }
 
-// Profile Modal Functionality
-const profileModal = document.getElementById('profileModal');
-const profileBtn = document.getElementById('profileBtn');
-const closeModal = document.querySelector('.close');
-const logoutBtn = document.getElementById('logoutBtn');
+
+const profileModal = document.getElementById("profileModal");
+const profileBtn = document.getElementById("profileBtn");
+const closeModal = document.querySelector(".close");
+const logoutBtn = document.getElementById("logoutBtn");
 
 // Open profile modal
-profileBtn.addEventListener('click', () => {
-  if (window.userData) {
-    document.getElementById('modalUsername').textContent = window.userData.username;
-    document.getElementById('modalEmail').textContent = window.userData.email;
-  }
-  profileModal.style.display = 'block';
-});
+if (profileBtn && profileModal) {
+  profileBtn.addEventListener("click", () => {
+    if (window.userData) {
+      const modalUsername = document.getElementById("modalUsername");
+      const modalEmail = document.getElementById("modalEmail");
+      if (modalUsername && modalEmail) {
+        modalUsername.textContent = window.userData.username;
+        modalEmail.textContent = window.userData.email;
+      }
+    }
+    profileModal.style.display = "block";
+  });
+}
 
 // Close modal when clicking X
-closeModal.addEventListener('click', () => {
-  profileModal.style.display = 'none';
-});
+if (closeModal && profileModal) {
+  closeModal.addEventListener("click", () => {
+    profileModal.style.display = "none";
+  });
+}
 
 // Close modal when clicking outside
-window.addEventListener('click', (e) => {
+window.addEventListener("click", (e) => {
   if (e.target === profileModal) {
-    profileModal.style.display = 'none';
+    profileModal.style.display = "none";
   }
 });
 
 // Handle Logout
-logoutBtn.addEventListener('click', async () => {
-  try {
-    const response = await fetch('/logout', {
-      method: 'POST'
-    });
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    // Clear local storage and go back to login
+    localStorage.removeItem("user");
+    localStorage.removeItem("performance");
+    window.location.href = "login.html";
+  });
+}
 
-    const data = await response.json();
+// --------- INITIALIZE DASHBOARD ---------
 
-    if (data.success) {
-      window.location.href = '/login.html';
-    }
-  } catch (error) {
-    console.error('Logout error:', error);
-    // Still redirect to login on error
-    window.location.href = '/login.html';
-  }
-});
-
-// Initialize dashboard
-checkAuth();
-loadDashboardData();
+const user = checkAuth(); // will redirect to login if not logged in
+if (user) {
+  loadDashboardData();
+}
